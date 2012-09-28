@@ -380,11 +380,17 @@ gst_motiondetect_transform_ip (GstBaseTransform * trans, GstBuffer * buf)
 
       if (filter->display) {
         buf = gst_buffer_make_writable (buf);
+
+        cvThreshold (filter->cvReferenceImageGray,
+            filter->cvReferenceImageGray, 40, 255, CV_THRESH_BINARY);
+        cvAndS (filter->cvReferenceImageGray, CV_RGB(0, 0, 0),
+            filter->cvReferenceImageGray, filter->cvInvertedMaskImage);
+
         cvSubS (filter->cvCurrentImage, CV_RGB(100, 100, 100),
             filter->cvCurrentImage, filter->cvInvertedMaskImage);
         if (result) {
-          cvAddS (filter->cvCurrentImage, CV_RGB(50, 0, 0),
-              filter->cvCurrentImage, filter->cvMaskImage);
+          cvAddS (filter->cvCurrentImage, CV_RGB(255, 0, 0),
+              filter->cvCurrentImage, filter->cvReferenceImageGray);
         }
       }
     }
