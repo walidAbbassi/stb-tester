@@ -958,27 +958,8 @@ def _match_template(image, template, match_parameters):
             log(roi, "source_roi")
             log(image_gray, "source_roi_gray")
             log(template_gray, "template_gray")
-
-            if match_parameters.confirm_method == "normed-absdiff":
-                cv2.normalize(image_gray, image_gray, 0, 255, cv2.NORM_MINMAX)
-                cv2.normalize(
-                    template_gray, template_gray, 0, 255, cv2.NORM_MINMAX)
-                log(image_gray, "source_roi_gray_normalized")
-                log(template_gray, "template_gray_normalized")
-
-            absdiff = cv2.absdiff(image_gray, template_gray)
-            _, thresholded = cv2.threshold(
-                absdiff, int(match_parameters.confirm_threshold * 255),
-                255, cv2.THRESH_BINARY)
-            eroded = cv2.erode(
-                thresholded,
-                cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)),
-                iterations=match_parameters.erode_passes)
-            log(absdiff, "absdiff")
-            log(thresholded, "absdiff_threshold")
-            log(eroded, "absdiff_threshold_erode")
-
-            matched = (cv2.countNonZero(eroded) == 0)
+            matched = _confirm_match_template(
+                    image, template, match_parameters)
 
     cv2.rectangle(
         image,
@@ -988,6 +969,29 @@ def _match_template(image, template, match_parameters):
         thickness=3)
 
     return matched, position, first_pass_certainty
+
+
+def _confirm_match_template(image, template, match_parameters):
+    if match_parameters.confirm_method == "normed-absdiff":
+        cv2.normalize(image_gray, image_gray, 0, 255, cv2.NORM_MINMAX)
+        cv2.normalize(
+            template_gray, template_gray, 0, 255, cv2.NORM_MINMAX)
+        log(image_gray, "source_roi_gray_normalized")
+        log(template_gray, "template_gray_normalized")
+
+    absdiff = cv2.absdiff(image_gray, template_gray)
+    _, thresholded = cv2.threshold(
+        absdiff, int(match_parameters.confirm_threshold * 255),
+        255, cv2.THRESH_BINARY)
+    eroded = cv2.erode(
+        thresholded,
+        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)),
+        iterations=match_parameters.erode_passes)
+    log(absdiff, "absdiff")
+    log(thresholded, "absdiff_threshold")
+    log(eroded, "absdiff_threshold_erode")
+
+    return (cv2.countNonZero(eroded) == 0)
 
 
 _frame_number = 0
