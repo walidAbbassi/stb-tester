@@ -61,6 +61,7 @@ python_docstrings() {
     echo ""
     doc press
     doc wait_for_match
+    doc wait_for_all_matches
     doc press_until_match
     doc wait_for_motion
     doc detect_match
@@ -78,6 +79,7 @@ python_docstrings() {
     doc Position
     doc MotionResult
     doc MatchTimeout
+    doc MatchAllTimeout
     doc MotionTimeout
     doc NoVideo
     doc UITestFailure
