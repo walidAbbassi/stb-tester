@@ -298,7 +298,7 @@ def detect_match(image, timeout_secs=10, noise_threshold=None,
     debug("Searching for " + template_)
 
     for frame, timestamp in frames(timeout_secs):
-        matched, position, first_pass_certainty = _match_template(
+        matched, position, first_pass_certainty = match_template(
             frame, template, match_parameters)
 
         result = MatchResult(
@@ -997,7 +997,42 @@ def gst_to_opencv(gst_buffer):
         dtype=numpy.uint8)
 
 
-def _match_template(image, template, match_parameters):
+def load_image(filepath, flag=1):
+    """Load an image from disk at location filepath.
+
+    `flag` is lifted from cv2.imread, where:
+
+    - >0 Loads the image with 3 channels (no alpha)
+    - =0 Loads the image with 1 channel (greyscale)
+    - <0 Loads the image "as is" (with alpha)
+
+    See http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#imread
+    """
+
+    im = cv2.imread(filepath, flag)
+    if im is None:
+        debug("Failed to load image '%s'" % filepath)
+    return im
+
+
+def match_template(image, template, match_parameters=None):
+    """stb-tester's core template matching algorithm. Attempts to match a given
+    template to a section of a source image of equal or greater size.
+    Returns True/False.
+
+    `image` is the source image in the form of a gst/numpy array; e.g. a frame
+    from a source video, as supplied by stbt.frames()
+
+    `template` is the template to match to image in the form of a opencv/numpy
+    array; e.g. as loaded by stbt.load_image()
+
+    Specificy match_parameters to customise the image matching algorithm.
+    See the documentation for MatchParameters for details.
+    """
+
+    if match_parameters is None:
+        match_parameters = MatchParameters()
+
     log = functools.partial(_log_image, directory="stbt-debug/detect_match")
 
     match_method_cv2 = {

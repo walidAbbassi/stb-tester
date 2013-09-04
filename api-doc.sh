@@ -80,6 +80,8 @@ python_docstrings() {
     doc NoVideo
     doc UITestFailure
     doc UITestError
+    doc load_image
+    doc match_template
 }
 
 # Prints sed commands to apply,
