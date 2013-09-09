@@ -258,7 +258,8 @@ class MatchResult(namedtuple(
     * `first_pass_result`: Value between 0 (poor) and 1.0 (excellent match)
       from the first pass of the two-pass templatematch algorithm.
     """
-    pass
+    def __nonzero__(self):
+        return bool(self.match)  # pylint: disable=E1101
 
 
 def detect_match(image, timeout_secs=10, noise_threshold=None,
