@@ -399,7 +399,7 @@ def detect_motion(timeout_secs=10, noise_threshold=None, mask=None):
                 frame,
                 numpy.multiply(
                     numpy.ones(frame.shape, dtype=numpy.uint8),
-                    (0, 0, 255),  # bgr
+                    (255, 0, 0),  # bgr
                     dtype=numpy.uint8),
                 mask=cv2.dilate(
                     thresholded,
