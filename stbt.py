@@ -250,9 +250,10 @@ class Position(namedtuple('Position', 'x y')):
 
 
 class MatchResult(namedtuple(
-        'MatchResult', 'timestamp match position first_pass_result')):
+        'MatchResult', 'timestamp template match position first_pass_result')):
     """
     * `timestamp`: Video stream timestamp.
+    * `template`: Filename of template being matched.
     * `match`: Boolean result.
     * `position`: `Position` of the match.
     * `first_pass_result`: Value between 0 (poor) and 1.0 (excellent match)
@@ -304,6 +305,7 @@ def detect_match(image, timeout_secs=10, noise_threshold=None,
 
         result = MatchResult(
             timestamp=timestamp,
+            template=image,
             match=matched,
             position=position,
             first_pass_result=first_pass_certainty)
@@ -489,6 +491,7 @@ def wait_for_all_matches(images, timeout_secs=10, match_parameters=None):
 
             result = MatchResult(
                 timestamp=timestamp,
+                template=template,
                 match=matched,
                 position=position,
                 first_pass_result=first_pass_certainty)

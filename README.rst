@@ -565,6 +565,7 @@ class MatchParameters
 
 class MatchResult
     * `timestamp`: Video stream timestamp.
+    * `template`: Filename of template being matched.
     * `match`: Boolean result.
     * `position`: `Position` of the match.
     * `first_pass_result`: Value between 0 (poor) and 1.0 (excellent match)
