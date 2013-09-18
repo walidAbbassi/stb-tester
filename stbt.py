@@ -654,7 +654,8 @@ def load_image(filepath, flag=1):
     See http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#imread
     """
 
-    im = cv2.imread(filepath, flag)
+    f = _find_path(filepath)
+    im = cv2.imread(f, flag)
     if im is None:
         debug("Failed to load image '%s'" % filepath)
     return im
