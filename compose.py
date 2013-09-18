@@ -171,6 +171,7 @@ def wait(*callbacks, **opts):
 
             if not _callbacks:
                 _found_templates = []
+                _frame = _timestamp = None
                 ret = ResultGroupBool(True, results_over_time.values())
                 stbt.debug("`wait`%s: exited successfully: %s" % (name, ret))
                 return ret
@@ -205,7 +206,6 @@ def match(*templates, **opts):
             _frame, _timestamp = stbt.frames().next()
 
         global _found_templates
-        print _found_templates
 
         match_results = []
         for tpl in [_ for _ in templates if _ not in _found_templates]:
@@ -262,7 +262,6 @@ wait(
         match("youview.png", "bbc1.png", find_once=True),
         match("minitv.png")),
     name="double match")()
-print _found_templates
 
 print "\n==== TEST #4 ====\n"
 if not_results(
@@ -277,3 +276,5 @@ wait(
         match("youview.png"),
         match("minitv.png")),
     name="will fail")()
+
+print
