@@ -15,6 +15,7 @@ Requires: gstreamer-plugins-bad-free
 Requires: gstreamer-plugins-base
 Requires: gstreamer-plugins-good
 Requires: gstreamer-python
+Requires: moreutils
 Requires: opencv
 Requires: opencv-python
 Requires: openssh-clients
